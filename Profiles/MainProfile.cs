@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MusicLibraryAPI.Entities;
+using MusicLibraryAPI.Models.Request;
 using MusicLibraryAPI.Models.Response;
 
 namespace MusicLibraryAPI.Profiles;
@@ -17,5 +18,9 @@ public class MainProfile: Profile
         CreateMap<User, GetUserResponse>()
             .ForMember(dest=> dest.FullName, 
                 opt=>opt.MapFrom(src=> $"{src.FirstName} {src.LastName}"));
+
+        CreateMap<CreateUserRequest, User>();
+        
+        
     }
 }

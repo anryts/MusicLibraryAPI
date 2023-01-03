@@ -115,15 +115,15 @@ namespace MusicLibraryAPI.Migrations
                         .HasColumnName("is_favourite");
 
                     b.HasKey("Id")
-                        .HasName("pk_user_song");
+                        .HasName("pk_user_songs");
 
                     b.HasIndex("SongId")
-                        .HasDatabaseName("ix_user_song_song_id");
+                        .HasDatabaseName("ix_user_songs_song_id");
 
                     b.HasIndex("UserId")
-                        .HasDatabaseName("ix_user_song_user_id");
+                        .HasDatabaseName("ix_user_songs_user_id");
 
-                    b.ToTable("user_song", (string)null);
+                    b.ToTable("user_songs", (string)null);
                 });
 
             modelBuilder.Entity("MusicLibraryAPI.Entities.Song", b =>
@@ -145,14 +145,14 @@ namespace MusicLibraryAPI.Migrations
                         .HasForeignKey("SongId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_user_song_songs_song_id");
+                        .HasConstraintName("fk_user_songs_songs_song_id");
 
                     b.HasOne("MusicLibraryAPI.Entities.User", "User")
                         .WithMany("UserSongs")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_user_song_users_user_id");
+                        .HasConstraintName("fk_user_songs_users_user_id");
 
                     b.Navigation("Song");
 

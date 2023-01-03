@@ -8,6 +8,7 @@ public class LibraryContext : DbContext
     public DbSet<Genre> Genres { get; set; }
     public DbSet<Song> Songs { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<UserSong> UserSongs { get; set; }
 
     public LibraryContext(DbContextOptions options): base(options) { }
     
