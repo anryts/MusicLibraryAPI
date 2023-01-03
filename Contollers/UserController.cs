@@ -44,7 +44,10 @@ public class UserController : ControllerBase
             .ThenInclude(x => x.Song)
             .ThenInclude(x => x.Genre)
             .FirstOrDefaultAsync(x => x.Id == id);
-
+        
+        if (result is null)
+         return new NotFoundResult();
+        
         var response = _mapper.Map<GetUserResponse>(result);
 
         return new OkObjectResult(response);
@@ -65,7 +68,7 @@ public class UserController : ControllerBase
         var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
         var song = await _context.Songs.FirstOrDefaultAsync(x => x.Id == songId);
 
-        if (user == null || song == null)
+        if (user is null || song is null)
         {
             return new NotFoundResult();
         }
