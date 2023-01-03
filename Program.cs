@@ -1,5 +1,7 @@
+using System.Reflection;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using MusicLibraryAPI.Data;
 using MusicLibraryAPI.Midllewares;
 using MusicLibraryAPI.Services;
@@ -23,6 +25,21 @@ builder.Services.AddControllers()
             options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         }
     );
+
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "MusicLibraryAPI", 
+        Version = "v1",
+        Description = "Привіт вам від студентів ТА-03",
+    });
+    
+     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+     options.IncludeXmlComments(xmlPath);
+});
 
 
 var app = builder.Build(); 

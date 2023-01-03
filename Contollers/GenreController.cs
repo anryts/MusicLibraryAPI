@@ -48,6 +48,12 @@ public class GenreController : ControllerBase
         return CreatedAtAction(nameof(GetGenre), new { id = genre.Id }, _mapper.Map<GetGenreResponse>(genre));
     }
     
+    /// <summary>
+    /// Hello World
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="request"></param>
+    /// <returns></returns>
     [HttpPut("{id}")]
     public ActionResult<GetGenreResponse> UpdateGenre(int id, [FromBody] string request)
     {
