@@ -1,8 +1,10 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MusicLibraryAPI.Data;
 using MusicLibraryAPI.Entities;
 using MusicLibraryAPI.Models.Request;
+using MusicLibraryAPI.Models.Response;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<LibraryContext>(options=>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddAutoMapper(typeof(MusicLibraryAPI.Profiles.MainProfile));
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -24,20 +29,32 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapGet("/users", async (LibraryContext context) =>
+app.MapGet("/users", async (LibraryContext context, IMapper mapper) =>
 {
-    var result = await context.Users.ToListAsync();
-    return new OkObjectResult(result);
+    var result = await context.Users.AsNoTracking()
+        .Include(x => x.UserSongs)
+        .ThenInclude(x => x.Song)
+        .ThenInclude(x => x.Genre)
+        .ToListAsync();
+
+    var response = mapper.Map<List<GetUserResponse>>(result);
+    
+    return new OkObjectResult(response);
 });
 
-app.MapGet("/users/{id}", async (LibraryContext context, int id) =>
+app.MapGet("/users/{id}", async (LibraryContext context, int id, IMapper mapper ) =>
 {
-    var result = await context.Users.Include(x => x.UserSongs)
-        .FirstOrDefaultAsync(x=> x.Id == id);
-    return new OkObjectResult(result);
+    var result = await context.Users.AsNoTracking()
+        .Include(x => x.UserSongs)
+        .ThenInclude(x => x.Song)
+        .ThenInclude(x => x.Genre)
+        .FirstOrDefaultAsync(x => x.Id == id);
+
+    var response = mapper.Map<GetUserResponse>(result);
+    
+    return new OkObjectResult(response);
 });
 
-//TODO: Add response to user with list of music to prevent cycle reference
 
 app.MapPost("/users", async ([FromBody] CreateUserRequest req ,LibraryContext context ) =>
 {
