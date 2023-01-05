@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MusicLibraryAPI.Data;
 
@@ -10,9 +11,11 @@ using MusicLibraryAPI.Data;
 namespace MusicLibraryAPI.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    partial class LibraryContextModelSnapshot : ModelSnapshot
+    [Migration("20230102172357_AddedIsFavourite")]
+    partial class AddedIsFavourite
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -115,15 +118,15 @@ namespace MusicLibraryAPI.Migrations
                         .HasColumnName("is_favourite");
 
                     b.HasKey("Id")
-                        .HasName("pk_user_songs");
+                        .HasName("pk_user_song");
 
                     b.HasIndex("SongId")
-                        .HasDatabaseName("ix_user_songs_song_id");
+                        .HasDatabaseName("ix_user_song_song_id");
 
                     b.HasIndex("UserId")
-                        .HasDatabaseName("ix_user_songs_user_id");
+                        .HasDatabaseName("ix_user_song_user_id");
 
-                    b.ToTable("user_songs", (string)null);
+                    b.ToTable("user_song", (string)null);
                 });
 
             modelBuilder.Entity("MusicLibraryAPI.Entities.Song", b =>
@@ -145,14 +148,14 @@ namespace MusicLibraryAPI.Migrations
                         .HasForeignKey("SongId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_user_songs_songs_song_id");
+                        .HasConstraintName("fk_user_song_songs_song_id");
 
                     b.HasOne("MusicLibraryAPI.Entities.User", "User")
                         .WithMany("UserSongs")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_user_songs_users_user_id");
+                        .HasConstraintName("fk_user_song_users_user_id");
 
                     b.Navigation("Song");
 
