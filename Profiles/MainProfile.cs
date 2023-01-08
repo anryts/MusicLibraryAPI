@@ -14,10 +14,13 @@ public class MainProfile: Profile
                 opt => opt.MapFrom(src => src.Song.Genre.Name))
             .ForMember(dest => dest.Title,
                 opt => opt.MapFrom(src => src.Song.Title));
-        
+
         CreateMap<User, GetUserResponse>()
-            .ForMember(dest=> dest.FullName, 
-                opt=>opt.MapFrom(src=> $"{src.FirstName} {src.LastName}"));
+            .ForMember(dest => dest.Id,
+                opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.FullName,
+                opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"));
+
 
         CreateMap<CreateUserRequest, User>();
         
