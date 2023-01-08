@@ -19,12 +19,21 @@ public class UserController : ControllerBase
     private readonly LibraryContext _context;
     private readonly IMapper _mapper;
 
+    /// <summary>
+    /// Constructor
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="mapper"></param>
     public UserController(LibraryContext context, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;
     }
 
+    /// <summary>
+    /// Get all users
+    /// </summary>
+    /// <returns>list of users</returns>
     [HttpGet]
     public async Task<IActionResult> GetUsers()
     {
@@ -39,6 +48,12 @@ public class UserController : ControllerBase
         return new OkObjectResult(response);
     }
 
+    /// <summary>
+    /// This method gets a usersongs and checks them by favourite key
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="isFavorite"></param>
+    /// <returns></returns>
     [HttpGet("{id}")]
     public async Task<IActionResult> GetUserSongs(int id, [FromQuery] bool isFavorite)
     {
@@ -57,6 +72,11 @@ public class UserController : ControllerBase
         return new OkObjectResult(response);
     }
 
+    /// <summary>
+    /// Create a new user
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
     [HttpPost()]
     public async Task<IActionResult> PostUser([FromBody] CreateUserRequest request)
     {
@@ -66,6 +86,13 @@ public class UserController : ControllerBase
         return new OkObjectResult(user);
     }
 
+
+    /// <summary>
+    /// Add song to user playlist
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="songId"></param>
+    /// <returns></returns>
     [HttpPut("{id}/songs/{songId}")]
     public async Task<IActionResult> AddSongToUser(int id, int songId)
     {
@@ -88,6 +115,12 @@ public class UserController : ControllerBase
         return new OkResult();
     }
 
+    /// <summary>
+    /// remove a song from user playlist
+    /// </summary>
+    /// <param name="id">UserId</param>
+    /// <param name="songId"></param>
+    /// <returns></returns>
     [HttpDelete("{id}/songs/{songId}")]
     public async Task<IActionResult> RemoveSongFromUser(int id, int songId)
     {
@@ -103,6 +136,13 @@ public class UserController : ControllerBase
         return new OkResult();
     }
 
+    /// <summary>
+    /// Setting a favourite key to a one of user song
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="songId"></param>
+    /// <param name="isFavourite"></param>
+    /// <returns></returns>
     [HttpPut("{id}/songs{songId}/isFavorite")]
     public async Task<IActionResult> SetFavorite(int id, int songId, bool isFavourite)
     {

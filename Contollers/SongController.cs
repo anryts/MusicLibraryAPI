@@ -108,7 +108,7 @@ public class SongController : ControllerBase
             return NotFound();
         
         _context.Songs.Remove(song);
-        _context.SaveChangesAsync();
+        await _context.SaveChangesAsync();
         return new OkObjectResult(song);
     }
 
