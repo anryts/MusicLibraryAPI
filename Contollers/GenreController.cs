@@ -78,13 +78,11 @@ public class GenreController : ControllerBase
     {
         var genre = _context.Genres.Find(id);
         if (genre is null)
-        {
             return NotFound();
-        }
         
         genre.Name = request;
         _context.SaveChanges();
-        return Ok(_mapper.Map<GetGenreResponse>(genre));
+        return Ok(genre);
     }
 
     /// <summary>
@@ -100,9 +98,8 @@ public class GenreController : ControllerBase
         if (genre is null)
             return NotFound();
         
-        
         _context.Genres.Remove(genre);
         _context.SaveChanges();
-        return NoContent();
+        return Ok($"Genre deleted {id}");
     }
 }
