@@ -59,12 +59,12 @@ public class GenreController : ControllerBase
     /// <param name="request"></param>
     /// <returns>Returns created genre</returns>
     [HttpPost]
-    public ActionResult<GetGenreResponse> CreateGenre([FromBody] CreateGenreRequest request)
+    public async Task<IActionResult> CreateGenre([FromBody] CreateGenreRequest request)
     {
         var genre = _mapper.Map<Genre>(request);
         _context.Genres.Add(genre);
-        _context.SaveChanges();
-        return CreatedAtAction(nameof(GetGenre), new { id = genre.Id }, _mapper.Map<GetGenreResponse>(genre));
+        await _context.SaveChangesAsync();
+        return new OkObjectResult(genre);
     }
 
     /// <summary>
