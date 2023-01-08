@@ -21,7 +21,6 @@ public class MainProfile: Profile
 
         CreateMap<CreateUserRequest, User>();
         
-
         CreateMap<CreateGenreRequest, Genre>()
             .ForMember(dest => dest.Name,
                 opt => opt.MapFrom(src => src.Name));

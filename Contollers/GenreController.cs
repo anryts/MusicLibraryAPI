@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using MusicLibraryAPI.Data;
 using MusicLibraryAPI.Entities;
@@ -40,17 +41,15 @@ public class GenreController : ControllerBase
     /// </summary>
     /// <param name="id">id of genre you want to get</param>
     /// <response code="200">Return genre</response>
-    /// <response code="400">If id is incorrect</response>
     /// <response code="404">If id does not exist</response>
     [HttpGet("{id}")]
-    public ActionResult<GetGenreResponse> GetGenre(int id)
+    public async Task<IActionResult> GetGenre(int id)
     {
-        var genre = _context.Genres.Find(id);
-        if (genre == null)
-        {
-            return NotFound();
-        }
-        return Ok(_mapper.Map<GetGenreResponse>(genre));
+        var genre = await _context.Genres.FindAsync(id);
+        if (genre is null)
+            throw new Exception("Genre not found with id: " + id);
+
+        return new OkObjectResult(genre);
     }
 
     /// <summary>
