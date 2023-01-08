@@ -1,5 +1,7 @@
+using System.Reflection;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using MusicLibraryAPI.Data;
 using MusicLibraryAPI.Midllewares;
 using MusicLibraryAPI.Services;
@@ -25,6 +27,21 @@ builder.Services.AddControllers()
     );
 
 
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "MusicLibraryAPI", 
+        Version = "v1",
+        Description = "API for managing user songs and more.",
+    });
+    
+     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+     options.IncludeXmlComments(xmlPath);
+});
+
+
 var app = builder.Build(); 
 
 if (app.Environment.IsDevelopment())
@@ -44,7 +61,11 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllers();
 });
 
-
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetService<LibraryContext>()!;
+    dbContext.Database.Migrate();
+}
 
 app.Run();
 
