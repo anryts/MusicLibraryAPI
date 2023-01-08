@@ -29,10 +29,10 @@ public class GenreController : ControllerBase
     /// </summary>
     /// <response code="200">Return all genres</response>
     [HttpGet]
-    public ActionResult<IEnumerable<GetGenreResponse>> GetGenres()
+    public ActionResult<IEnumerable<Genre>> GetGenres()
     {
         var genres = _context.Genres.ToList();
-        return Ok(_mapper.Map<IEnumerable<GetGenreResponse>>(genres));
+        return genres;
     }
 
     /// <summary>
@@ -73,13 +73,12 @@ public class GenreController : ControllerBase
     /// <param name="id">id of genre you want to update</param>
     /// <param name="request"></param>
     /// <response code="200">Updates genre</response>
-    /// <response code="400">If id is incorrect</response>
     /// <response code="404">If id does not exist</response>
     [HttpPut("{id}")]
     public ActionResult<GetGenreResponse> UpdateGenre(int id, [FromBody] string request)
     {
         var genre = _context.Genres.Find(id);
-        if (genre == null)
+        if (genre is null)
         {
             return NotFound();
         }
@@ -94,22 +93,17 @@ public class GenreController : ControllerBase
     /// </summary>
     /// <param name="id">id of genre you want to delete</param>
     /// <response code="200">Deletes genre</response>
-    /// <response code="400">If id is incorrect</response>
     /// <response code="404">If id does not exist</response>
     [HttpDelete("{id}")]
     public ActionResult DeleteGenre(int id)
     {
         var genre = _context.Genres.Find(id);
-        if (genre == null)
-        {
+        if (genre is null)
             return NotFound();
-        }
+        
         
         _context.Genres.Remove(genre);
         _context.SaveChanges();
         return NoContent();
     }
-    
-    
-
 }

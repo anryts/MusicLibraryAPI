@@ -33,7 +33,7 @@ builder.Services.AddSwaggerGen(options =>
     {
         Title = "MusicLibraryAPI", 
         Version = "v1",
-        Description = "Привіт вам від студентів ТА-03",
+        Description = "API for managing user songs and more.",
     });
     
      var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -61,7 +61,11 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllers();
 });
 
-
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetService<LibraryContext>()!;
+    dbContext.Database.Migrate();
+}
 
 app.Run();
 
